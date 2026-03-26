@@ -1,0 +1,110 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.clawdroid'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.clawdroid"
+        minSdk 26          // Android 8.0+ (GestureDescription API 26)
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+
+        // Support large AI responses
+        vectorDrawables { useSupportLibrary true }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+        freeCompilerArgs += ['-opt-in=kotlin.RequiresOptIn']
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.8'
+    }
+
+    // Allow large response bodies
+    packaging {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+    // ── Compose BOM ──────────────────────────────────
+    def composeBom = platform('androidx.compose:compose-bom:2024.02.02')
+    implementation composeBom
+
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material:material-icons-extended'
+    implementation 'androidx.compose.animation:animation'
+    implementation 'androidx.compose.foundation:foundation'
+    implementation 'androidx.activity:activity-compose:1.9.0'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
+    // ── Core Android ─────────────────────────────────
+    implementation 'androidx.core:core-ktx:1.13.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-service:2.7.0'
+
+    // ── DataStore (API keys + settings) ──────────────
+    implementation 'androidx.datastore:datastore-preferences:1.1.1'
+
+    // ── WorkManager (heartbeat scheduler) ────────────
+    implementation 'androidx.work:work-runtime-ktx:2.9.0'
+
+    // ── Coroutines ───────────────────────────────────
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
+
+    // ── OkHttp (WebSocket + HTTP for all API calls) ──
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+
+    // ── Accompanist (permissions, system UI) ─────────
+    implementation 'com.google.accompanist:accompanist-permissions:0.34.0'
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.34.0'
+
+    // ── Coil (image loading for screenshots) ─────────
+    implementation 'io.coil-kt:coil-compose:2.6.0'
+
+    // ── Navigation Compose ───────────────────────────
+    implementation 'androidx.navigation:navigation-compose:2.7.7'
+
+    // ── Media (for audio playback - ElevenLabs TTS) ──
+    implementation 'androidx.media:media:1.7.0'
+
+    // ── QR Code scanning (for gateway pairing) ───────
+    implementation 'com.google.android.gms:play-services-code-scanner:16.1.0'
+
+    // ── Splash Screen ────────────────────────────────
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+}
